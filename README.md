@@ -39,21 +39,37 @@ Menu superior entrar/registrar
 #### SQL Injection
 
 3 - vamos pensar em um SQL que possa ser usado no sistema:
+
 SELECT username FROM tableusers WHERE password='1234'
+
 vamos manipular este código usando aspas simples ao redor dele assim:
+
 'SELECT username FROM tableusers WHERE password='1234''
+
 quando colocamos aspas simples ao redor o banco de dados normalmente response erro de sintaxe.
+
 Sabendo disso podemos ver ser o sistema tem uma vulnerabilidade digitando no username aspas simples mais um espaço: [' ]
+
 O sistema responde um erro com informações como: MySQLHandler
+
 e Query: SELECT username FROM accounts WHERE username='' ';
+
 (Assim sabemos que o sistema usa o MySQL e também sabemos o nome do campo da tabela "username" e o nome da tabela "accounts")
+
 Então temos concreto: SELECT username FROM accounts WHERE username='' '
+
 vamos manipular o código concreto:
+
 SELECT username FROM accounts WHERE username='admin' or '8'='8';
+
 neste caso 8 sempre será igual a 8 então no campo username no sistema vamos colocar: admin or '8'='8 na senha vamos colocar qualquer coisa.
+
 E conseguimos logar no sistema! e como Admin!
+
 Vamos estar outra coisa, deslogando do sistema primeiro.
+
 Agora colocamos um usuário qualquer e na senha vamos colocar nossa expressão: admin or '8'='8
+
 E também conseguimos logar no sistema! e como Admin!
 
 4 - exemplo de mitigação deste erro:
@@ -91,8 +107,10 @@ OWASP 2013 > A3 - Cross Site Scripting (XSS) > Persistence (second order) > Add 
           </script>
 
 Instalar e abrir o XAMPP Control Panel:
+
 Apache config > alterar linha: Listen 192.168.56.101:80 (obs: o ip que aparecer ao rodar o OWASP BWA)
 alterar também dentro da tag "Directory" no final colocar "Allow from all"
+
 Abrir outro browser no endereço ip que configuramos:
 
         Vamos adicionar outro script:
@@ -103,12 +121,19 @@ Abrir outro browser no endereço ip que configuramos:
 Isso pode simular que o sistema caiu.
 
 6 - Como evitar:
+
 Etapa 1: treinar e manter a conscientização
+
 Etapa 2: não confie em nenhuma entrada do usuário
+
 Etapa 3: usar escape/codificação
+
 Etapa 4: limpar o HTML
+
 Etapa 5: definir o sinalizador HttpOnly
+
 Etapa 6: use uma política de segurança de conteúdo (CSP)
+
 Etapa 7: digitalize regularmente (exemplo com Acunetix)
 
 ## 4 Análise black-box e web firewalls
